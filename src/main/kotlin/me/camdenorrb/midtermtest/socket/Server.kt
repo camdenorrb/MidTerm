@@ -4,35 +4,39 @@ import com.corundumstudio.socketio.Configuration
 import com.corundumstudio.socketio.SocketIOServer
 import com.corundumstudio.socketio.listener.DataListener
 import io.netty.util.concurrent.Future
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by camdenorrb on 4/12/17.
  */
 
+const val alreadyStopped = "Attempted to stop a already stopped server!"
+const val alreadyStarted = "Attempted to start a already started server!"
+
 // The main server
 class Server(ip: String, port: Int): SocketIOServer(Configuration().apply { this.hostname = ip; this.port = port }) {
 
 	// Keep track of the start status privately and atomically.
-	private var started = AtomicBoolean(false)
+	private @Volatile var started = false
+		private set
 
-	// Check if the server is running atomically.
-	fun isRunning() = started.get()
 
 
 	// Stop the server if it is started.
 	override fun stop() {
-		if (isRunning()) super.stop().also { started.set(false) }
+		check(started.not()) { alreadyStopped }
+		super.stop().also { started = false }
 	}
 
 	// Start the server if it isn't running.
 	override fun start() {
-		if (isRunning().not()) super.start().also { started.set(true) }
+		check(started) { alreadyStarted }
+		super.start().also { started = true }
 	}
 
 	// Start the server asynchronously if it isn't running.
-	override fun startAsync(): Future<Void>? {
-		return if (isRunning().not()) super.startAsync().also { started.set(true) } else null
+	override fun startAsync(): Future<Void> {
+		check(started) { alreadyStarted }
+		return super.startAsync().also { started = true }
 	}
 
 
