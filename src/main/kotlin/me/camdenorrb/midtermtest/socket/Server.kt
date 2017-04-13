@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 
 // The main server
-class Server(ip: String = "127.0.0.1", port: Int = 9092): SocketIOServer(Configuration().apply { this.hostname = ip; this.port = port }) {
+class Server(ip: String, port: Int): SocketIOServer(Configuration().apply { this.hostname = ip; this.port = port }) {
 
 	// Keep track of the start status privately and atomically.
 	private var started = AtomicBoolean(false)
@@ -21,13 +21,19 @@ class Server(ip: String = "127.0.0.1", port: Int = 9092): SocketIOServer(Configu
 
 
 	// Stop the server if it is started.
-	override fun stop() { if (isRunning()) super.stop().also { started.set(false) } }
+	override fun stop() {
+		if (isRunning()) super.stop().also { started.set(false) }
+	}
 
 	// Start the server if it isn't running.
-	override fun start() { if (isRunning().not()) super.start().also { started.set(true) } }
+	override fun start() {
+		if (isRunning().not()) super.start().also { started.set(true) }
+	}
 
 	// Start the server asynchronously if it isn't running.
-	override fun startAsync(): Future<Void>? = if (isRunning().not()) super.startAsync().also { started.set(true) } else null
+	override fun startAsync(): Future<Void>? {
+		return if (isRunning().not()) super.startAsync().also { started.set(true) } else null
+	}
 
 
 	// Add a listener in a Kotlin friendly fashion.
