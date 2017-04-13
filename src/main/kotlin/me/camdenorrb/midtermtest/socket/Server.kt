@@ -15,7 +15,7 @@ const val alreadyStarted = "Attempted to start a already started server!"
 // The main server
 class Server(ip: String, port: Int): SocketIOServer(Configuration().apply { this.hostname = ip; this.port = port }) {
 
-	// Keep track of the start status privately and atomically.
+	// Keep track of the start status privately and in a volatile fashion.
 	@Volatile var started = false
 		private set
 
