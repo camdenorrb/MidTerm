@@ -45,7 +45,7 @@ internal class MainTest {
 		socket.connect()
 
 		// Waits until the server stops
-		while (server.isRunning()) {}
+		while (server.started) {}
 
 	}
 

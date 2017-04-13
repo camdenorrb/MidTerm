@@ -16,26 +16,25 @@ const val alreadyStarted = "Attempted to start a already started server!"
 class Server(ip: String, port: Int): SocketIOServer(Configuration().apply { this.hostname = ip; this.port = port }) {
 
 	// Keep track of the start status privately and atomically.
-	private @Volatile var started = false
+	@Volatile var started = false
 		private set
-
 
 
 	// Stop the server if it is started.
 	override fun stop() {
-		check(started.not()) { alreadyStopped }
+		check(started) { alreadyStopped }
 		super.stop().also { started = false }
 	}
 
 	// Start the server if it isn't running.
 	override fun start() {
-		check(started) { alreadyStarted }
+		check(started.not()) { alreadyStarted }
 		super.start().also { started = true }
 	}
 
 	// Start the server asynchronously if it isn't running.
 	override fun startAsync(): Future<Void> {
-		check(started) { alreadyStarted }
+		check(started.not()) { alreadyStarted }
 		return super.startAsync().also { started = true }
 	}
 
