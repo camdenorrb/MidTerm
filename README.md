@@ -3,6 +3,8 @@ To Test `mvn clean test`
 
 To Build: `mvn clean package`
 
+To compile and install on your local maven repo: `mvn clean package install`
+
 
 If Test or Build fails saying "Address already in use", try closing the Java instance and try again.
 
