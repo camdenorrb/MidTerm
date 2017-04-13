@@ -15,9 +15,7 @@ java -jar MidtermTest-1.0-jar-with-dependencies 127.0.0.1 9092
 127.0.0.1 being the ip and 9092 being the port, change to your liking.
 
 
-SocketIO Channels:
-     - FibErr (Errors)
-     - FibResp (Response)
+SocketIO Channels: { FibErr (Errors), FibResp (Response) }
 
 
 Client packet order: Connect -> Send calc request -> Receive response or error
