@@ -17,7 +17,7 @@ internal class MainTest {
 	val socket = IO.socket("http://127.0.0.1:9092")!!
 
 	// Initialize the server and add default listeners.
-	val server = Server().apply { this.addListener("CalcFib", CalcFibListener()) }
+	val server = Server("127.0.0.1", 9092).apply { this.addListener("CalcFib", CalcFibListener()) }
 
 
 	@Test
