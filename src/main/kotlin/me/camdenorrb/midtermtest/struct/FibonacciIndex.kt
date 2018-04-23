@@ -13,7 +13,7 @@ data class FibonacciIndex(val index: Int = 0) {
 
 	// Performance favorable way to calculate the nth number in the Fibonacci sequence.
 	fun calcFib(term: Int) : Long {
-	    val powered = Math.pow(goldenRatio, term.toDouble())
+	    val powered = Math.pow(goldenRatio, (term + 1).toDouble())
 	    return ((powered - (1 / powered)) / sqrtFive).roundToLong()
 	}
 
